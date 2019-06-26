@@ -22,18 +22,26 @@ void TegraStereoProc::onInit() {
 
   ros::NodeHandle &nh = getNodeHandle();
   ros::NodeHandle &private_nh = getPrivateNodeHandle();
+  std::string stereo_camera_l_topic;
+  std::string stereo_camera_r_topic;
+  std::string stereo_camera_l_info;
+  std::string stereo_camera_r_info;
 
   private_nh.param("P1", p1_, 20);
   private_nh.param("P2", p2_, 100);
 
   private_nh.param("queue_size", queue_size_, 100);
+  private_nh.param<std::string>("stereo_camera_l_topic", stereo_camera_l_topic, std::string("/miivii_gmsl_camera_front_node/image_gmsl_raw0"));
+  private_nh.param<std::string>("stereo_camera_r_topic", stereo_camera_r_topic, std::string("/miivii_gmsl_camera_front_node/image_gmsl_raw1"));
+  private_nh.param<std::string>("stereo_camera_l_info", stereo_camera_l_info, std::string("/miivii_gmsl_camera_front_node/image_gmsl_camera_info0"));
+  private_nh.param<std::string>("stereo_camera_r_info", stereo_camera_r_info, std::string("/miivii_gmsl_camera_front_node/image_gmsl_camera_info1"));
   
   it_ = boost::make_shared<image_transport::ImageTransport>(nh);
   
-  left_raw_sub_.subscribe(*it_.get(), "/stereo/cam0/image_raw", 1);
-  right_raw_sub_.subscribe(*it_.get(), "/stereo/cam1/image_raw", 1);
-  left_info_sub_.subscribe(nh, "/stereo/cam0/camera_info", 1);
-  right_info_sub_.subscribe(nh, "/stereo/cam1/camera_info", 1);
+  left_raw_sub_.subscribe(*it_.get(), stereo_camera_l_topic, 1);
+  right_raw_sub_.subscribe(*it_.get(), stereo_camera_r_topic, 1);
+  left_info_sub_.subscribe(nh, stereo_camera_l_info, 1);
+  right_info_sub_.subscribe(nh, stereo_camera_r_info, 1);
   
   left_rect_pub_ = it_->advertise("/stereo/cam0/image_rect", 1);
   right_rect_pub_ = it_->advertise("/stereo/cam1/image_rect", 1);

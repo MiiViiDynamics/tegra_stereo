@@ -1,0 +1,12 @@
+<launch>
+    <!-- $ rosrun nodelet nodelet manager __name:=sample_nodelet_manager -->
+    <node pkg="nodelet" type="nodelet" args="manager" name="sample_nodelet_manager" output="screen" />
+
+    <node pkg="nodelet" type="nodelet" args="load tegra_stereo/tegra_stereo_proc sample_nodelet_manager" 
+        name="SampleNodeletClass_loader" output="screen">
+         <param name="stereo_camera_l_topic"  value="/miivii_gmsl_camera_front_node/image_gmsl_raw0" />
+         <param name="stereo_camera_r_topic"  value="/miivii_gmsl_camera_front_node/image_gmsl_raw1" />
+         <param name="stereo_camera_l_info"  value="/miivii_gmsl_camera_front_node/camera_info" />
+         <param name="stereo_camera_r_info"  value="/miivii_gmsl_camera_front_node/camera_info" />
+    </node>
+</launch>
